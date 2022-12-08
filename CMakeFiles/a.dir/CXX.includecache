@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/e/Vscode/Work/Project/CS205_Project5/Matrix.cpp
+iostream
+-
+Matrix.hpp
+/mnt/e/Vscode/Work/Project/CS205_Project5/Matrix.hpp
+
+/mnt/e/Vscode/Work/Project/CS205_Project5/Matrix.hpp
+
+/mnt/e/Vscode/Work/Project/CS205_Project5/main.cpp
+Matrix.hpp
+/mnt/e/Vscode/Work/Project/CS205_Project5/Matrix.hpp
+
