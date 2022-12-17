@@ -6,19 +6,25 @@
 
 #IncludeRegexTransform: 
 
-/mnt/e/Vscode/Work/Project/CS205_Project5/src/Matrix.cpp
+/mnt/e/Vscode/Work/Project/CS205_Project5/src/Data_I.h
 iostream
 -
-Matrix.hpp
-/mnt/e/Vscode/Work/Project/CS205_Project5/src/Matrix.hpp
+cstring
+-
 
-/mnt/e/Vscode/Work/Project/CS205_Project5/src/main.cpp
-Matrix.cpp
-/mnt/e/Vscode/Work/Project/CS205_Project5/src/Matrix.cpp
-
-include/Matrix.hpp
+/mnt/e/Vscode/Work/Project/CS205_Project5/src/Matrix.h
 memory
 -
 iostream
 -
+Data_I.h
+/mnt/e/Vscode/Work/Project/CS205_Project5/src/Data_I.h
+
+/mnt/e/Vscode/Work/Project/CS205_Project5/src/main.cpp
+iostream
+-
+exception
+-
+Matrix.h
+/mnt/e/Vscode/Work/Project/CS205_Project5/src/Matrix.h
 

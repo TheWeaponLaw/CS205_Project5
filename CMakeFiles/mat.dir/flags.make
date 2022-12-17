@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/mnt/e/Vscode/Work/Project/CS205_Project5/include 
+CXX_INCLUDES = 
 
