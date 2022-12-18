@@ -16,9 +16,11 @@ private:
 public:
     Matrix(size_t row, size_t col, size_t channel);
     Matrix(size_t row, size_t col, size_t channel, T *data);
-
+    Matrix(Matrix &matrix);
     Matrix<T> &operator=(const Matrix<T> &matrix);
     Matrix<T> &operator+(const Matrix<T> &matrix);
+    Matrix<T> &operator-(const Matrix<T> &matrix);
+    Matrix<T> &operator*(const Matrix<T> &matrix);
     bool operator==(const Matrix<T> &matrix) const;
 
     friend std::ostream &operator<<(std::ostream &os, const Matrix<T> &matrix)
@@ -109,9 +111,40 @@ Matrix<T>::Matrix(size_t row, size_t col, size_t channel, T *data)
     }
     catch (const bad_alloc &e)
     {
-        delete data;
-        data = nullptr;
+        delete this->data;
+        this->data = nullptr;
         throw "Memory allocated failed!";
+    }
+    catch (const char *msg) // catch the expectation especially in valid data and memory allocated
+    {
+        throw msg;
+    }
+    catch (...)
+    {
+        throw "Unknown exception!";
+    }
+}
+
+template <typename T>
+Matrix<T>::Matrix(Matrix<T> &matrix)
+{
+    try
+    {
+        if (matrix.data == nullptr)
+        {
+            throw "The data is empty!";
+        }
+        else if (row == 0 || col == 0 || channel == 0) // judge the valid before construct
+        {
+            throw "The data of matrix is invalid.";
+        }
+        else
+        {
+            this->row = matrix.row;
+            this->col = matrix.col;
+            this->channel = matrix.channel;
+            this->data = matrix.data;
+        }
     }
     catch (const char *msg) // catch the expectation especially in valid data and memory allocated
     {
@@ -147,11 +180,6 @@ Matrix<T> &Matrix<T>::operator=(const Matrix<T> &matrix)
         cout << "The equal matrix is invalid!" << endl;
         return *this;
     }
-    else if (matrix.row != this->row || matrix.col != this->col || matrix.channel != this->channel)
-    {
-        cout << "Two matrix have different size!" << endl;
-        return *this;
-    }
     else
     {
         *(this->data) = *(matrix.data);
@@ -165,7 +193,7 @@ Matrix<T> &Matrix<T>::operator=(const Matrix<T> &matrix)
 template <typename T>
 bool Matrix<T>::operator==(const Matrix<T> &matrix) const
 {
-    if (this->data == nullptr || matrix->data == nullptr)
+    if (this->data == nullptr || matrix.data == nullptr)
     {
         cout << "The matrix data is empty!" << endl;
         return false;
@@ -176,11 +204,11 @@ bool Matrix<T>::operator==(const Matrix<T> &matrix) const
     }
     else if (this->data == matrix.data)
     {
-        return ture;
+        return true;
     }
     else
     {
-        if (memcmp(this->data, matrix.data, this->col * this->row * this->channel * sizeof(T)))
+        if (memcmp(this->data, matrix.data, this->col * this->row * this->channel * sizeof(T)) == 0)
         {
             return true;
         }
@@ -189,4 +217,14 @@ bool Matrix<T>::operator==(const Matrix<T> &matrix) const
             return false;
         }
     }
+}
+
+template <typename T>
+Matrix<T> &operator+(const Matrix<T> &matrix)
+{
+    // if (this->data == nullptr || matrix->data == nullptr)
+    // {
+    //     cout << "The data is empty!" << endl;
+    //     return NULL;
+    // }
 }

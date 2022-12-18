@@ -4,16 +4,14 @@
 using namespace std;
 int main()
 {
-    // try
-    // {
-    //     Matrix<int> matrix0(0, 1, 2);
-    // }
-    // catch (const char *msg)
-    // {
-    //     cout << msg << endl;
-    // }
-
-    int *p = nullptr;
-    delete p;
-    delete p;
+    try
+    {
+        Matrix<int> matrix0(1, 1, 2);
+        Matrix<int> matrix1(matrix0);
+        cout << (matrix0 == matrix1) << endl;
+    }
+    catch (const char *msg)
+    {
+        cout << msg << endl;
+    }
 }

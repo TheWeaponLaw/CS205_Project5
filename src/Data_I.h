@@ -14,6 +14,7 @@ class Data
 public:
     Data(size_t row, size_t col, size_t channel);
     Data(size_t row, size_t col, size_t channel, T *data);
+    Data(Data<T> &data);
     T *getData()
     {
         return this->data;
@@ -90,10 +91,46 @@ Data<T>::Data(size_t row, size_t col, size_t channel, T *data)
 }
 
 template <typename T>
+Data<T>::Data(Data<T> &other)
+{
+    try
+    {
+        this->data = other.data;
+        this->ref = other.ref;
+        (*this->ref)++;
+    }
+    catch (...)
+    {
+        delete ref;
+        ref = nullptr;
+        delete[] data;
+        data = nullptr;
+        throw "Unknown exceptions";
+    }
+}
+
+template <typename T>
 Data<T> &Data<T>::operator=(const Data<T> &other)
 {
-    if (this == &other)
+    if (other == nullptr)
     {
+        cout << "The equal data is empty!" << endl;
+        return *this;
+    }
+    else if (other.data == nullptr)
+    {
+        cout << "The equal data is empty!" << endl;
+        return *this;
+    }
+    else if (this == &other)
+    {
+        return *this;
+    }
+    else if (this == nullptr)
+    {
+        this->data = other.data;
+        this->ref = other.ref;
+        (*this->ref)++;
         return *this;
     }
     else
