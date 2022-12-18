@@ -112,12 +112,7 @@ Data<T>::Data(Data<T> &other)
 template <typename T>
 Data<T> &Data<T>::operator=(const Data<T> &other)
 {
-    if (other == nullptr)
-    {
-        cout << "The equal data is empty!" << endl;
-        return *this;
-    }
-    else if (other.data == nullptr)
+    if (other.data == nullptr)
     {
         cout << "The equal data is empty!" << endl;
         return *this;

@@ -1,7 +1,9 @@
 #pragma once
+
 #include <memory>
 #include <iostream>
 #include "Data_I.h"
+
 using namespace std;
 
 template <typename T>
@@ -11,16 +13,28 @@ private:
     size_t row;
     size_t col;
     size_t channel;
-    Data<T> *data;
+    size_t start = 0;
+    size_t step = 0;
+    size_t par_size = 0;
+    Data<T> *data = nullptr;
 
 public:
     Matrix(size_t row, size_t col, size_t channel);
+
     Matrix(size_t row, size_t col, size_t channel, T *data);
+
     Matrix(Matrix &matrix);
+
     Matrix<T> &operator=(const Matrix<T> &matrix);
-    Matrix<T> &operator+(const Matrix<T> &matrix);
-    Matrix<T> &operator-(const Matrix<T> &matrix);
+
+    Matrix<T> &operator+(const Matrix<T> &matrix) const;
+
+    Matrix<T> &operator-(const Matrix<T> &matrix) const;
+
     Matrix<T> &operator*(const Matrix<T> &matrix);
+
+    Matrix<T> &getROI(size_t dest1_x, size_t dest1_y, size_t dest2_x, size_t dest2_y);
+
     bool operator==(const Matrix<T> &matrix) const;
 
     friend std::ostream &operator<<(std::ostream &os, const Matrix<T> &matrix)
@@ -35,15 +49,16 @@ public:
             for (size_t i = 0; i < matrix.channel; ++i)
             {
                 string str;
-                T *part_pointer = matrix.data->getData() + i * matrix.row * matrix.col;
+                T *part_pointer = matrix.data->getData() + i * matrix.par_size + matrix.start;
                 str += "The No." + to_string(i + 1) + " channel is\n";
                 for (size_t k = 0; k < matrix.row; ++k)
                 {
                     for (size_t j = 0; j < matrix.col; ++j)
                     {
-                        str += to_string(*(part_pointer + k * matrix.col + j)) + " ";
+                        str += to_string(*(part_pointer++)) + " ";
                     }
                     str += "\n";
+                    part_pointer += matrix.step;
                 }
                 str += "\n";
                 os << str;
@@ -69,6 +84,7 @@ Matrix<T>::Matrix(size_t row, size_t col, size_t channel)
             this->row = row;
             this->col = col;
             this->channel = channel;
+            this->par_size = row * col;
             this->data = new Data<T>(row, col, channel);
         }
     }
@@ -106,6 +122,7 @@ Matrix<T>::Matrix(size_t row, size_t col, size_t channel, T *data)
             this->row = row;
             this->col = col;
             this->channel = channel;
+            this->par_size = row * col;
             this->data = new Data<T>(row, col, channel, data);
         }
     }
@@ -134,7 +151,7 @@ Matrix<T>::Matrix(Matrix<T> &matrix)
         {
             throw "The data is empty!";
         }
-        else if (row == 0 || col == 0 || channel == 0) // judge the valid before construct
+        else if (matrix.row == 0 || matrix.col == 0 || matrix.channel == 0) // judge the valid before construct
         {
             throw "The data of matrix is invalid.";
         }
@@ -143,7 +160,8 @@ Matrix<T>::Matrix(Matrix<T> &matrix)
             this->row = matrix.row;
             this->col = matrix.col;
             this->channel = matrix.channel;
-            this->data = matrix.data;
+            this->par_size = matrix.par_size;
+            this->data = new Data<T>(*matrix.data);
         }
     }
     catch (const char *msg) // catch the expectation especially in valid data and memory allocated
@@ -159,7 +177,7 @@ Matrix<T>::Matrix(Matrix<T> &matrix)
 template <typename T>
 Matrix<T>::~Matrix()
 {
-    delete data;
+    delete (data - start);
     data = nullptr;
     cout << "Deconstructed!" << endl;
 }
@@ -186,6 +204,9 @@ Matrix<T> &Matrix<T>::operator=(const Matrix<T> &matrix)
         this->channel = matrix.channel;
         this->row = matrix.row;
         this->col = matrix.col;
+        this->start = matrix.start;
+        this->step = matrix.step;
+        this->par_size = matrix.par_size;
         return *this;
     }
 }
@@ -208,7 +229,7 @@ bool Matrix<T>::operator==(const Matrix<T> &matrix) const
     }
     else
     {
-        if (memcmp(this->data, matrix.data, this->col * this->row * this->channel * sizeof(T)) == 0)
+        if (memcmp(this->data - start, matrix.data - start, this->col * this->row * this->channel * sizeof(T)) == 0)
         {
             return true;
         }
@@ -220,11 +241,142 @@ bool Matrix<T>::operator==(const Matrix<T> &matrix) const
 }
 
 template <typename T>
-Matrix<T> &operator+(const Matrix<T> &matrix)
+Matrix<T> &Matrix<T>::operator+(const Matrix<T> &matrix) const
 {
-    // if (this->data == nullptr || matrix->data == nullptr)
-    // {
-    //     cout << "The data is empty!" << endl;
-    //     return NULL;
-    // }
+    if (matrix.data == nullptr || this->data == nullptr)
+    {
+        cout << "The data is empty!" << endl;
+        return *this;
+    }
+    else if (this->row != matrix.row || this->col != matrix.col || this->channel != matrix.channel)
+    {
+        cout << "The size of matrix are not same!" << endl;
+        return *this;
+    }
+    else
+    {
+        Matrix<T> *matrix_res = new Matrix<T>(this->row, this->col, this->channel);
+        T *data_result = matrix_res->data->getData();
+        T *data1 = this->data->getData() + this->start;
+        T *data2 = matrix.data->getData() + matrix.start;
+        for (size_t i = 0; i < this->channel; ++i)
+        {
+            for (size_t j = 0; j < this->row; ++j)
+            {
+                for (size_t k = 0; k < this->col; ++k)
+                {
+                    (*(data_result++)) = (*(data1++)) + (*(data2++));
+                }
+                data1 += this->step;
+                data2 += matrix->step;
+            }
+            data1 += this->par_size;
+            data2 += matrix.par_size;
+        }
+        return *matrix_res;
+    }
+}
+
+template <typename T>
+Matrix<T> &Matrix<T>::operator-(const Matrix<T> &matrix) const
+{
+    if (matrix.data == nullptr || this->data == nullptr)
+    {
+        cout << "The data is empty!" << endl;
+        return *this;
+    }
+    else if (this->row != matrix.row || this->col != matrix.col || this->channel != matrix.channel)
+    {
+        cout << "The size of matrix are not same!" << endl;
+        return *this;
+    }
+    else
+    {
+        Matrix<T> *matrix_res = new Matrix<T>(this->row, this->col, this->channel);
+        T *data_result = matrix_res->data->getData();
+        T *data1 = this->data->getData() + start;
+        T *data2 = matrix.data->getData() + start;
+        for (size_t i = 0; i < this->channel; ++i)
+        {
+            for (size_t j = 0; j < this->row; ++j)
+            {
+                for (size_t k = 0; k < this->col; ++k)
+                {
+                    (*(data_result++)) = (*(data1++)) - (*(data2++));
+                }
+                data1 += this->step;
+                data2 += matrix->step;
+            }
+            data1 += this->par_size;
+            data2 += matrix.par_size;
+        }
+        return *matrix_res;
+    }
+}
+
+template <typename T>
+Matrix<T> &Matrix<T>::operator*(const Matrix &matrix)
+{
+    if (matrix.data == nullptr || this->data == nullptr)
+    {
+        cout << "The multiple matrix are empty!" << endl;
+        return *this;
+    }
+    else if (this->col != matrix.row || this->channel != matrix.channel)
+    {
+        cout << "The size of matrix are not match!" << endl;
+        return *this;
+    }
+    else
+    {
+        Matrix<T> *matrix_res = new Matrix<T>(this->row, matrix.col, this->channel);
+#pragma omp parallel for
+        T *data_res = matrix_res->data->getData();
+        T *data1 = this->data->getData() + start;
+        T *data2 = matrix.data->getData() + start;
+        for (size_t c = 0; c < this->channel; ++c)
+        {
+            for (size_t i = 0; i < this->row; ++i)
+            {
+                for (size_t k = 0; k < this->col; ++k)
+                {
+                    for (size_t j = 0; j < matrix.col; ++j)
+                    {
+                        *(data_res + i * matrix_res->col + j) +=
+                            *(data1 + i * (this->col + step) + k) * *(data2 + k * (matrix.col + step) + j);
+                    }
+                }
+            }
+            data_res += matrix_res->col * matrix_res->row;
+            data1 += this->col * this->row;
+            data2 += matrix.col * matrix.row;
+        }
+        return *matrix_res;
+    }
+}
+
+template <typename T>
+Matrix<T> &Matrix<T>::getROI(size_t dest1_x, size_t dest1_y, size_t dest2_x, size_t dest2_y)
+{
+    if (this->data == nullptr)
+    {
+        cout << "The matrix is invalid!" << endl;
+        return *this;
+    }
+    else if (dest1_x < 0 || dest2_x > this->col || dest1_y < 0 || dest2_y > this->row || dest1_x > dest2_x ||
+             dest1_y > dest2_y)
+    {
+        cout << "The matrix data is invalid!" << endl;
+        return *this;
+    }
+    else
+    {
+        Matrix<T> *matrix = this;
+        matrix->start = dest1_y * this->col + dest2_x;
+        matrix->par_size = this->col * this->row;
+        matrix->row = dest2_y - dest1_y + 1;
+        matrix->col = dest2_x - dest1_x + 1;
+        matrix->step = this->row - matrix->row;
+        return *matrix;
+    }
 }
