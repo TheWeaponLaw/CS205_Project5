@@ -79,6 +79,8 @@ mat_EXTERNAL_OBJECTS =
 
 mat: CMakeFiles/mat.dir/src/main.cpp.o
 mat: CMakeFiles/mat.dir/build.make
+mat: /usr/lib/gcc/x86_64-linux-gnu/9/libgomp.so
+mat: /usr/lib/x86_64-linux-gnu/libpthread.so
 mat: CMakeFiles/mat.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/mnt/e/Vscode/Work/Project/CS205_Project5/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable mat"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/mat.dir/link.txt --verbose=$(VERBOSE)

@@ -27,15 +27,15 @@ public:
 
     Matrix<T> &operator=(const Matrix<T> &matrix);
 
-    Matrix<T> &operator+(const Matrix<T> &matrix) const;
+    Matrix<T> &operator+(const Matrix<T> &matrix);
 
-    Matrix<T> &operator-(const Matrix<T> &matrix) const;
+    Matrix<T> &operator-(const Matrix<T> &matrix);
 
     Matrix<T> &operator*(const Matrix<T> &matrix);
 
     Matrix<T> &getROI(size_t dest1_x, size_t dest1_y, size_t dest2_x, size_t dest2_y);
 
-    bool operator==(const Matrix<T> &matrix) const;
+    bool operator==(const Matrix<T> &matrix);
 
     friend std::ostream &operator<<(std::ostream &os, const Matrix<T> &matrix)
     {
@@ -161,6 +161,8 @@ Matrix<T>::Matrix(Matrix<T> &matrix)
             this->col = matrix.col;
             this->channel = matrix.channel;
             this->par_size = matrix.par_size;
+            this->start = matrix.start;
+            this->step = matrix.step;
             this->data = new Data<T>(*matrix.data);
         }
     }
@@ -212,7 +214,7 @@ Matrix<T> &Matrix<T>::operator=(const Matrix<T> &matrix)
 }
 
 template <typename T>
-bool Matrix<T>::operator==(const Matrix<T> &matrix) const
+bool Matrix<T>::operator==(const Matrix<T> &matrix)
 {
     if (this->data == nullptr || matrix.data == nullptr)
     {
@@ -241,7 +243,7 @@ bool Matrix<T>::operator==(const Matrix<T> &matrix) const
 }
 
 template <typename T>
-Matrix<T> &Matrix<T>::operator+(const Matrix<T> &matrix) const
+Matrix<T> &Matrix<T>::operator+(const Matrix<T> &matrix)
 {
     if (matrix.data == nullptr || this->data == nullptr)
     {
@@ -268,17 +270,20 @@ Matrix<T> &Matrix<T>::operator+(const Matrix<T> &matrix) const
                     (*(data_result++)) = (*(data1++)) + (*(data2++));
                 }
                 data1 += this->step;
-                data2 += matrix->step;
+                data2 += matrix.step;
             }
-            data1 += this->par_size;
-            data2 += matrix.par_size;
+            if (step != 0)
+            {
+                data1 += this->par_size;
+                data2 += matrix.par_size;
+            }
         }
         return *matrix_res;
     }
 }
 
 template <typename T>
-Matrix<T> &Matrix<T>::operator-(const Matrix<T> &matrix) const
+Matrix<T> &Matrix<T>::operator-(const Matrix<T> &matrix)
 {
     if (matrix.data == nullptr || this->data == nullptr)
     {
@@ -307,8 +312,11 @@ Matrix<T> &Matrix<T>::operator-(const Matrix<T> &matrix) const
                 data1 += this->step;
                 data2 += matrix->step;
             }
-            data1 += this->par_size;
-            data2 += matrix.par_size;
+            if (step != 0)
+            {
+                data1 += this->par_size;
+                data2 += matrix.par_size;
+            }
         }
         return *matrix_res;
     }
@@ -330,10 +338,10 @@ Matrix<T> &Matrix<T>::operator*(const Matrix &matrix)
     else
     {
         Matrix<T> *matrix_res = new Matrix<T>(this->row, matrix.col, this->channel);
-#pragma omp parallel for
         T *data_res = matrix_res->data->getData();
         T *data1 = this->data->getData() + start;
         T *data2 = matrix.data->getData() + start;
+#pragma omp parallel for
         for (size_t c = 0; c < this->channel; ++c)
         {
             for (size_t i = 0; i < this->row; ++i)

@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CS205_Project5.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="cs205-c-c-programming---project5">CS205 C/ C++ Programming - Project5</h1>
+<p><strong>Name：王启帆（WangQifan）</strong></br>
+<strong>SID: 12110206</strong></p>
+<h2 id="part-1-analysis">Part-1 Analysis</h2>
+<p>  在此project中，我们需要用C++语言设计一个矩阵运算的库，矩阵用类来构建，所类成员函数包括，构造函数，复制构造函数，析构函数，加法重载，减法重载，赋值重载，乘法重载与优化，ROI区域，和一个输出流的重载。</br>
+  这次project的方法比较相似，一开始进行传入数据合法性的判断，根据不同的运算要求做相应的处理，最后输出数据。</br>
+  这次project中最主要的一点就是构造了新的一个Data类来辅助进行soft copy，其中最重要的是有一个代表引用次数的计数器和所指的数据。</br>
+  这次project中另一点是对于异常处理的应用，在几个构造函数中用到了异常处理，并不断向上抛出，保证每一级可以处理数据，以防出现数据泄露。</br></p>
+<h2 id="part-2-code">Part-2 Code</h2>
+<h3 id="data%E7%B1%BB">Data类</h3>
+<p>   Data类中有两个private成员变量，ref计数器和data所储存的数据，同时含有构造函数，析构函数，复制函数，和一个取数据地址的函数。取数据地址的函数是为了方面进行矩阵之间的算数操作。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Data</span>
+{</span>
+    <span class="hljs-keyword">int</span> *ref = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>(<span class="hljs-number">0</span>);
+    T *data = <span class="hljs-literal">nullptr</span>;
+
+<span class="hljs-keyword">public</span>:
+    Data(<span class="hljs-keyword">size_t</span> row, <span class="hljs-keyword">size_t</span> col, <span class="hljs-keyword">size_t</span> channel);
+    Data(<span class="hljs-keyword">size_t</span> row, <span class="hljs-keyword">size_t</span> col, <span class="hljs-keyword">size_t</span> channel, T *data);
+    Data(Data&lt;T&gt; &amp;data);
+    <span class="hljs-function">T *<span class="hljs-title">getData</span><span class="hljs-params">()</span>
+    </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>-&gt;data;
+    }
+    Data&lt;T&gt; &amp;<span class="hljs-keyword">operator</span>=(<span class="hljs-keyword">const</span> Data&lt;T&gt; &amp;data);
+    ~Data();
+};
+</div></code></pre>
+<p>  其中在每次做好计数器的加与减并在每次减后，判断是否为0，为零则释放储存数据的空间，以赋值函数为例</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+Data&lt;T&gt; &amp;Data&lt;T&gt;::<span class="hljs-keyword">operator</span>=(<span class="hljs-keyword">const</span> Data&lt;T&gt; &amp;other)
+{
+    <span class="hljs-keyword">if</span> (other.data == <span class="hljs-literal">nullptr</span>)
+    {
+        <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"The equal data is empty!"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+    }
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == &amp;other)
+    {
+        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+    }
+    <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span> == <span class="hljs-literal">nullptr</span>)
+    {
+        <span class="hljs-keyword">this</span>-&gt;data = other.data;
+        <span class="hljs-keyword">this</span>-&gt;ref = other.ref;
+        (*<span class="hljs-keyword">this</span>-&gt;ref)++;
+        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+    }
+    <span class="hljs-keyword">else</span>
+    {
+        (*<span class="hljs-keyword">this</span>-&gt;ref)--;
+        <span class="hljs-keyword">if</span> (*<span class="hljs-keyword">this</span>-&gt;ref == <span class="hljs-number">0</span>)
+        {
+            <span class="hljs-keyword">try</span>
+            {
+                <span class="hljs-keyword">delete</span>[] <span class="hljs-keyword">this</span>-&gt;data;
+                <span class="hljs-keyword">this</span>-&gt;data = <span class="hljs-literal">nullptr</span>;
+                <span class="hljs-keyword">delete</span> ref;
+                <span class="hljs-keyword">this</span>-&gt;ref = <span class="hljs-literal">nullptr</span>;
+                <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Delete data successfully!"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+            }
+            <span class="hljs-keyword">catch</span> (...)
+            {
+                <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"delete error"</span> &lt;&lt; <span class="hljs-built_in">endl</span>;
+            }
+        }
+        <span class="hljs-keyword">this</span>-&gt;data = other.data;
+        <span class="hljs-keyword">this</span>-&gt;ref = other.ref;
+        (*<span class="hljs-keyword">this</span>-&gt;ref)++;
+        <span class="hljs-keyword">return</span> *<span class="hljs-keyword">this</span>;
+    }
+}
+
+</div></code></pre>
+<h3 id="%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86">异常处理</h3>
+<p>   关于异常处理部分，主要分为抛出异常和不抛出异常处理，因为抛出异常并不是越多越好，抛出异常意味着强制退出当前函数，并要上一级处理，还会降低运行速度。有些没有必要的地方可以不抛出异常，所以我在此project中选择部分地方输出错误信息。主要抛出异常的地方在于构造器部分，因为构造器如果不用抛出异常打断的话，程序会默认已经生成了一个对象，这与用户所希望的不同，如果创建对象的值是非法值或创建过程中出错，如列为0，数据指针为空，申请空间失败，则抛出异常，并在每次抛出时进行数据处理，把每一级申请的空间释放等。最后会输出到主函数中，主函数打印出错误。至于其它部分，抛出异常后程序会自动启动逆析构函数，将其它部分析构掉。这样，当有异常值输入的时候，创建对象无法生成。</br>
+   至于其它部分合法性的处理则与Project3判断条件差不多。</br>
+   以矩阵的创建为例,调用了Data类的创建，矩阵的创建</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+Data&lt;T&gt;::Data(<span class="hljs-keyword">size_t</span> row, <span class="hljs-keyword">size_t</span> col, <span class="hljs-keyword">size_t</span> channel)
+{
+    <span class="hljs-keyword">try</span>
+    {
+        data = <span class="hljs-keyword">new</span> T[row * col * channel]();
+        *ref = <span class="hljs-number">1</span>;
+    }
+    <span class="hljs-keyword">catch</span> (<span class="hljs-keyword">const</span> bad_alloc &amp;e)
+    {
+        <span class="hljs-keyword">try</span>
+        {
+            <span class="hljs-keyword">delete</span> ref;
+            ref = <span class="hljs-literal">nullptr</span>;
+            <span class="hljs-keyword">delete</span>[] data;
+            data = <span class="hljs-literal">nullptr</span>;
+            <span class="hljs-keyword">throw</span> <span class="hljs-string">"Memory allocated fail"</span>;
+        }
+        <span class="hljs-keyword">catch</span> (...)
+        {
+            <span class="hljs-keyword">throw</span> <span class="hljs-string">"Unknown exceptions"</span>;
+        }
+    }
+    <span class="hljs-keyword">catch</span> (...)
+    {
+        <span class="hljs-keyword">delete</span> ref;
+        ref = <span class="hljs-literal">nullptr</span>;
+        <span class="hljs-keyword">delete</span>[] data;
+        data = <span class="hljs-literal">nullptr</span>;
+        <span class="hljs-keyword">throw</span> <span class="hljs-string">"Unknown exceptions"</span>;
+    }
+}
+
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt;
+Matrix&lt;T&gt;::Matrix(<span class="hljs-keyword">size_t</span> row, <span class="hljs-keyword">size_t</span> col, <span class="hljs-keyword">size_t</span> channel)
+{
+    <span class="hljs-keyword">try</span>
+    {
+        <span class="hljs-keyword">if</span> (row == <span class="hljs-number">0</span> || col == <span class="hljs-number">0</span> || channel == <span class="hljs-number">0</span>) <span class="hljs-comment">// judge the valid before construct</span>
+        {
+            <span class="hljs-keyword">throw</span> <span class="hljs-string">"The data of matrix is invalid."</span>;
+        }
+        <span class="hljs-keyword">else</span>
+        {
+            <span class="hljs-keyword">this</span>-&gt;row = row;
+            <span class="hljs-keyword">this</span>-&gt;col = col;
+            <span class="hljs-keyword">this</span>-&gt;channel = channel;
+            <span class="hljs-keyword">this</span>-&gt;par_size = row * col;
+            <span class="hljs-keyword">this</span>-&gt;data = <span class="hljs-keyword">new</span> Data&lt;T&gt;(row, col, channel);
+        }
+    }
+    <span class="hljs-keyword">catch</span> (<span class="hljs-keyword">const</span> bad_alloc &amp;e)
+    {
+        <span class="hljs-keyword">delete</span> data;
+        data = <span class="hljs-literal">nullptr</span>;
+        <span class="hljs-keyword">throw</span> <span class="hljs-string">"Memory allocated failed!"</span>;
+    }
+    <span class="hljs-keyword">catch</span> (<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *msg) <span class="hljs-comment">// catch the expectation especially in valid data and memory allocated</span>
+    {
+        <span class="hljs-keyword">throw</span> msg;
+    }
+    <span class="hljs-keyword">catch</span> (...)
+    {
+        <span class="hljs-keyword">throw</span> <span class="hljs-string">"Unknown exception!"</span>;
+    }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">try</span> {
+        
+    }
+    <span class="hljs-keyword">catch</span> (<span class="hljs-keyword">const</span> <span class="hljs-keyword">char</span> *msg) {
+        <span class="hljs-built_in">cout</span> &lt;&lt; msg &lt;&lt; <span class="hljs-built_in">endl</span>;
+    }
+}
+</div></code></pre>
+<h3 id="roi">ROI</h3>
+<p>   ROI部分是作为取一部分的父矩阵作为新的矩阵，进行数据的操作。在原有的矩阵基础上加入了start小矩阵取大矩阵的第一位，step大矩阵列数和小矩阵的差，方便作换行操作，par_size，大矩阵一个channel的大小，方便处理完一个channel后的换channel。</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">private</span>:
+    <span class="hljs-keyword">size_t</span> row;
+    <span class="hljs-keyword">size_t</span> col;
+    <span class="hljs-keyword">size_t</span> channel;
+    <span class="hljs-keyword">size_t</span> start = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">size_t</span> step = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">size_t</span> par_size = <span class="hljs-number">0</span>;
+    Data&lt;T&gt; *data = <span class="hljs-literal">nullptr</span>;
+</div></code></pre>
+<p>  取POI的操作是在原有的基础上，取两个点作为小图片的左上角和右下角</p>
+
+</body>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });</script>
+
+</html>
