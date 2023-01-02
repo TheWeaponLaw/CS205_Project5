@@ -380,7 +380,7 @@ Matrix<T> &Matrix<T>::getROI(size_t dest1_x, size_t dest1_y, size_t dest2_x, siz
     else
     {
         Matrix<T> *matrix = this;
-        matrix->start = dest1_y * this->col + dest2_x;
+        matrix->start = dest1_y * this->col + dest1_x;
         matrix->par_size = this->col * this->row;
         matrix->row = dest2_y - dest1_y + 1;
         matrix->col = dest2_x - dest1_x + 1;
